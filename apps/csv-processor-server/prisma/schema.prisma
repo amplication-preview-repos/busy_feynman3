@@ -1,0 +1,37 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Record {
+  createdAt DateTime @default(now())
+  csvFile   CsvFile? @relation(fields: [csvFileId], references: [id])
+  csvFileId String?
+  data      Json?
+  id        String   @id @default(cuid())
+  updatedAt DateTime @updatedAt
+}
+
+model CsvFile {
+  createdAt DateTime @default(now())
+  filePath  String?
+  id        String   @id @default(cuid())
+  processed Boolean?
+  records   Record[]
+  updatedAt DateTime @updatedAt
+}
+
+model FtpConfig {
+  createdAt  DateTime @default(now())
+  host       String?
+  id         String   @id @default(cuid())
+  password   String?
+  port       Int?
+  remotePath String?
+  updatedAt  DateTime @updatedAt
+  username   String?
+}
